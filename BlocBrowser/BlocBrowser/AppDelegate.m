@@ -10,6 +10,9 @@
 #import "ViewController.h"
 
 @interface AppDelegate ()
+//@interface ViewController : UIViewController
+//@interface ViewController () <WKNavigationDelegate, UITextFieldDelegate>
+
 
 @end
 
@@ -23,6 +26,18 @@
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
 
     [self.window makeKeyAndVisible];
+    
+    //Welcome Message
+    UIAlertController *welcomeMessage = [UIAlertController alertControllerWithTitle:@"Welcome"
+                                                                   message:@"Welcome to Private Browsing.  All browser activity will be deleted upon the app becoming inactive"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"Thanks" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [welcomeMessage addAction:defaultAction];
+    [self.window.rootViewController presentViewController:welcomeMessage animated:YES completion:nil];
+    
     return YES;
 }
 
