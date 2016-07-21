@@ -68,8 +68,8 @@
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
         [self addGestureRecognizer:self.panGesture];
         
-        //self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:(pinchFired:)];
-        //[self addGestureRecognizer:self.pinchGesture];
+        self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
+        [self addGestureRecognizer:self.pinchGesture];
         
     }
     
@@ -107,6 +107,33 @@
     }
 }
 
+
+- (void) pinchFired:(UIPinchGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateChanged) {
+        CGFloat scale = recognizer.scale;
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
+            [self.delegate floatingToolbar:self didTryToPinchWithScale:scale];
+        }
+        
+        //[recognizer scaleAccordingly];
+    }
+}
+
+
+//CGAffineTransform transform = CGAffineTransformMakeScale(recognizer.scale, recognizer.scale);
+//floatingToolbar.transform = transform;
+//CGFloat scale = [recognizer self];
+//CGFloat velocity = [recognizer <>];
+
+//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
+//            [self.delegate floatingToolbar: self didTryToPinchWithScale:scale];
+//        }
+//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithVelocity:)]) {
+//            [self.delegate floatingToolbar: self didTryToPinchWithVelocity:velocity];
+//        }
+//
+//[recognizer setTranslation:CGPointZero inView:self];
 
 
 - (void) layoutSubviews {
