@@ -115,6 +115,10 @@
 
 - (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale {
     //resize tootlabr here
+    //CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
+    //[transform AwesomeFloatingToolbar];
+    //AwesomeFloatingToolbar.transform = CGAffineTransformMakeScale(scale, scale);
+    self.awesomeToolbar.transform = CGAffineTransformMakeScale(scale, scale);
 }
 
 
