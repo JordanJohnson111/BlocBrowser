@@ -148,6 +148,10 @@
         
         self.colors = mutableColorArray;
         
+        
+        
+        //[self initWithFourTitles:mutableColorArray];
+        
         //set colors with mutableColorArray????????
         
 //        if (self) {
