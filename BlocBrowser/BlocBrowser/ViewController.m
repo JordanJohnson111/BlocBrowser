@@ -115,11 +115,19 @@
 
 - (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale {
     //resize tootlabr here
-    //CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
-    //[transform AwesomeFloatingToolbar];
-    //AwesomeFloatingToolbar.transform = CGAffineTransformMakeScale(scale, scale);
     self.awesomeToolbar.transform = CGAffineTransformMakeScale(scale, scale);
 }
+
+//- (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryLongGestureRandomizer: ?????? {
+//    //randomize colors
+//    NSMutableArray *mutableColorArray = [@[self.colors] mutableCopy];
+//    
+//    for (NSInteger i = mutableColorArray.count-1; i > 0; i--)
+//    {
+//        [mutableColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+//    }
+//    
+//}
 
 
 #pragma mark - UITextFieldDelegate

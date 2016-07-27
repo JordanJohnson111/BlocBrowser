@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
 
 @end
 
@@ -71,6 +72,8 @@
         self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
         [self addGestureRecognizer:self.pinchGesture];
         
+        self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressFired:)];
+        [self addGestureRecognizer:self.longPressGesture];
     }
     
     return self;
@@ -115,25 +118,79 @@
         if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
             [self.delegate floatingToolbar:self didTryToPinchWithScale:scale];
         }
-        
-        //[recognizer scaleAccordingly];
     }
 }
 
 
-//CGAffineTransform transform = CGAffineTransformMakeScale(recognizer.scale, recognizer.scale);
-//floatingToolbar.transform = transform;
-//CGFloat scale = [recognizer self];
-//CGFloat velocity = [recognizer <>];
-
-//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
-//            [self.delegate floatingToolbar: self didTryToPinchWithScale:scale];
-//        }
-//        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithVelocity:)]) {
-//            [self.delegate floatingToolbar: self didTryToPinchWithVelocity:velocity];
+- (void) longPressFired:(UILongPressGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateChanged) {
+        
+        
+        
+//        NSUInteger count = [self.colors count];
+//        for (NSUInteger i = 0; i < count; ++i) {
+//            // Select a random element between i and end of array to swap with.
+//            int nElements = count - i;
+//            int n = (arc4random() % nElements) + i;
+//            [self.colors exchangeObjectAtIndex:i withObjectAtIndex:n];
 //        }
 //
-//[recognizer setTranslation:CGPointZero inView:self];
+        
+        // the Knuth shuffle
+        
+        NSMutableArray *mutableColorArray = [@[self.colors] mutableCopy];
+        
+        for (NSInteger i = mutableColorArray.count-1; i > 0; i--)
+        {
+            [mutableColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+        }
+        
+        
+        self.colors = mutableColorArray;
+        
+        //set colors with mutableColorArray????????
+        
+//        if (self) {
+//            
+//            // Save the titles, and set the 4 colors
+//            //self.currentTitles = titles;
+//            self.colors = mutableColorArray;
+//            
+//            NSMutableArray *labelsArray = [[NSMutableArray alloc] init];
+//            
+//            // Make the 4 labels
+//            for (NSString *currentTitle in self.currentTitles) {
+//                UILabel *label = [[UILabel alloc] init];
+//                label.userInteractionEnabled = NO;
+//                label.alpha = 0.25;
+//                
+//                NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle]; // 0 through 3
+//                NSString *titleForThisLabel = [self.currentTitles objectAtIndex:currentTitleIndex];
+//                UIColor *colorForThisLabel = [self.colors objectAtIndex:currentTitleIndex];
+//                
+//                label.textAlignment = NSTextAlignmentCenter;
+//                label.font = [UIFont systemFontOfSize:10];
+//                label.text = titleForThisLabel;
+//                label.backgroundColor = colorForThisLabel;
+//                label.textColor = [UIColor whiteColor];
+//                
+//                [labelsArray addObject:label];
+//            }
+//            
+//            self.labels = labelsArray;
+//            
+//            for (UILabel *thisLabel in self.labels) {
+//                [self addSubview:thisLabel];
+//            }
+//        }
+
+        
+        
+        //if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryLongGestureRandomizer:)]) {
+        //    [self.delegate floatingToolbar:self didTryLongGestureRandomizer:];
+        //}
+    }
+}
 
 
 - (void) layoutSubviews {
