@@ -12,13 +12,13 @@
 
 @property (nonatomic, strong) NSArray *currentTitles;
 @property (nonatomic, strong) NSArray *colors;
-@property (nonatomic, strong) NSArray *labels;
-@property (nonatomic, weak) UILabel *currentLabel;
+//@property (nonatomic, strong) NSArray *labels;
+//@property (nonatomic, weak) UILabel *currentLabel;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
-@property (nonatomic, strong) UIButton *buttons;
+@property (nonatomic, strong) NSArray *buttons;
 
 @end
 
@@ -47,18 +47,18 @@
 //            
 //            NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle]; // 0 through 3
 //            NSString *titleForThisLabel = [self.currentTitles objectAtIndex:currentTitleIndex];
-//            UIColor *colorForThisLabel = [self.colors objectAtIndex:currentTitleIndex];
 //            
 //            label.textAlignment = NSTextAlignmentCenter;
 //            label.font = [UIFont systemFontOfSize:10];
 //            label.text = titleForThisLabel;
-//            label.backgroundColor = colorForThisLabel;
 //            label.textColor = [UIColor whiteColor];
 //            
 //            [labelsArray addObject:label];
 //        }
 //        
 //        self.labels = labelsArray;
+//        
+//        [self setColorsForLabels];
 //        
 //        for (UILabel *thisLabel in self.labels) {
 //            [self addSubview:thisLabel];
@@ -97,7 +97,7 @@
         
         // Make the 4 buttons
         for (NSString *currentTitle in self.currentTitles) {
-            UIButton *button = [[UIButton alloc] init];
+            UIButton *button = [[UIButton alloc] init]; //fix this not the way to initialize
             //UILabel *label = [[UILabel alloc] init];
             button.userInteractionEnabled = NO;
             button.alpha = 0.25;
@@ -106,9 +106,10 @@
             NSString *titleForThisButton = [self.currentTitles objectAtIndex:currentTitleIndex];
             UIColor *colorForThisButton = [self.colors objectAtIndex:currentTitleIndex];
             
-            button.titleLabel.textAlignment = NSTextAlignmentCenter;
+            
             button.titleLabel.font = [UIFont systemFontOfSize:10];
             button.titleLabel.text = titleForThisButton;
+            //work here for setting text
             button.backgroundColor = colorForThisButton;
             button.tintColor = [UIColor whiteColor];
             
@@ -139,18 +140,18 @@
 
 #pragma mark -  Gesture Handling
 
-//- (void) tapFired:(UITapGestureRecognizer *)recognizer {
-//    if (recognizer.state == UIGestureRecognizerStateRecognized) {
-//        CGPoint location = [recognizer locationInView:self];
-//        UIView *tappedView = [self hitTest:location withEvent:nil];
-//        
-//        if ([self.labels containsObject:tappedView]) {
-//            if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-//                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UILabel *)tappedView).text];
-//            }
-//        }
-//    }
-//}
+- (void) tapFired:(UITapGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateRecognized) {
+        CGPoint location = [recognizer locationInView:self];
+        UIView *tappedView = [self hitTest:location withEvent:nil];
+        
+        if ([self.labels containsObject:tappedView]) {
+            if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
+                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UILabel *)tappedView).text];
+            }
+        }
+    }
+}
 
 - (void) panFired:(UIPanGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateChanged) {
@@ -177,83 +178,45 @@
     }
 }
 
+- (void)setColorsForLabels {
+    for (UILabel *label in self.labels) {
+        NSUInteger currentLabelIndex = [self.labels indexOfObject:label];
+        UIColor *colorForThisLabel = [self.colors objectAtIndex:currentLabelIndex];
+        
+        label.backgroundColor = colorForThisLabel;
+        
+    }
+}
 
 - (void) longPressFired:(UILongPressGestureRecognizer *)recognizer {
-    self.colors = @[[UIColor colorWithRed:199/255.0 green:158/255.0 blue:203/255.0 alpha:1],
-                    [UIColor colorWithRed:255/255.0 green:105/255.0 blue:97/255.0 alpha:1],
-                    [UIColor colorWithRed:222/255.0 green:165/255.0 blue:164/255.0 alpha:1],
-                    [UIColor colorWithRed:255/255.0 green:179/255.0 blue:71/255.0 alpha:1]];
+//    self.colors = @[[UIColor colorWithRed:199/255.0 green:158/255.0 blue:203/255.0 alpha:1],
+//                    [UIColor colorWithRed:255/255.0 green:105/255.0 blue:97/255.0 alpha:1],
+//                    [UIColor colorWithRed:222/255.0 green:165/255.0 blue:164/255.0 alpha:1],
+//                    [UIColor colorWithRed:255/255.0 green:179/255.0 blue:71/255.0 alpha:1]];
 
-    NSMutableArray *mutableColorArray = [@[self.colors] mutableCopy];
+    NSMutableArray *mutableColorArray = [self.colors mutableCopy];
 
-    if (recognizer.state == UIGestureRecognizerStateChanged) {
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
         
         //randomize color array
         for (NSInteger i = mutableColorArray.count-1; i > 0; i--) {
-            [mutableColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+            [mutableColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(4)];
         }
     
         //self.colors = mutableColorArray;
-    }
+    
     
         //self = [super init];
         
-        if (self) {
+    
             //set new colors
             //self.currentTitles = titles;
             self.colors = mutableColorArray;
-            
-            
-            NSMutableArray *newLabelsArray = [[NSMutableArray alloc] init];
-            for (UILabel *label in self.labels) {
-                NSUInteger currentLabelIndex = [self.labels indexOfObject:label];
-                UIColor *colorForThisLabel = [self.colors objectAtIndex:currentLabelIndex];
-                
-                label.backgroundColor = colorForThisLabel;
-                [newLabelsArray addObject:label];
-            }
-            self.labels = newLabelsArray;
-            
-            for (UILabel *thisLabel in self.labels) {
-                [self addSubview:thisLabel];
-            }
+        [self setColorsForLabels];
     
-    //self = [super init];
-    
-//    if (self) {
-//        
-//        // Save the titles, and set the 4 colors
-//        //self.currentTitles = titles;
-//        self.colors = mutableColorArray;
-//        
-//        NSMutableArray *labelsArray = [[NSMutableArray alloc] initWithCapacity:4];
-//        
-//        // Make the 4 labels
-//        for (NSString *currentTitle in self.currentTitles) {
-//            UILabel *label = [[UILabel alloc] init];
-//            label.userInteractionEnabled = NO;
-//            label.alpha = 0.25;
-//            
-//            NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle]; // 0 through 3
-//            NSString *titleForThisLabel = [self.currentTitles objectAtIndex:currentTitleIndex];
-//            UIColor *colorForThisLabel = [self.colors objectAtIndex:currentTitleIndex];
-//            
-//            label.textAlignment = NSTextAlignmentCenter;
-//            label.font = [UIFont systemFontOfSize:10];
-//            label.text = titleForThisLabel;
-//            label.backgroundColor = colorForThisLabel;
-//            label.textColor = [UIColor whiteColor];
-//            
-//            [labelsArray addObject:label];
-//        }
-//        
-//        self.labels = labelsArray;
-//        
-//        for (UILabel *thisLabel in self.labels) {
-//            [self addSubview:thisLabel];
-//        }
-        }
+        
 
+    }
 
 }
 
@@ -292,10 +255,10 @@
 
 - (void) layoutSubviews {
     // set the frames for the 4 labels
-    NSMutableArray *buttonsArray = [[NSMutableArray alloc] initWithCapacity:4];
+
     
-    for (UIButton *thisButton in buttonsArray) {
-        NSUInteger currentButtonIndex = [buttonsArray indexOfObject:thisButton];
+    for (UIButton *thisButton in self.buttons) {
+        NSUInteger currentButtonIndex = [self.buttons indexOfObject:thisButton];
         
         CGFloat buttonHeight = CGRectGetHeight(self.bounds) / 2;
         CGFloat buttonWidth = CGRectGetWidth(self.bounds) / 2;
@@ -343,6 +306,7 @@
 
 #pragma mark - Button Enabling
 
+
 - (void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
     NSUInteger index = [self.currentTitles indexOfObject:title];
     
@@ -352,6 +316,17 @@
         label.alpha = enabled ? 1.0 : 0.25;
     }
 }
+
+//- (void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
+//    NSUInteger index = [self.currentTitles indexOfObject:title];
+//    
+//    if (index != NSNotFound) {
+//        UIButton *button = [self.buttons objectAtIndex:index];
+//        button.userInteractionEnabled = enabled;
+//        button.alpha = enabled ? 1.0 : 0.25;
+//    }
+//}
+
 
 
 /*
