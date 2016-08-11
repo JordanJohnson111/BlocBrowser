@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
 @property (nonatomic, strong) NSArray *buttons;
+@property (nonatomic, strong) UIButton *button;
 
 @end
 
@@ -97,7 +98,7 @@
         
         // Make the 4 buttons
         for (NSString *currentTitle in self.currentTitles) {
-            UIButton *button = [[UIButton alloc] init]; //fix this not the way to initialize
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; //fix this not the way to initialize
             //UILabel *label = [[UILabel alloc] init];
             button.userInteractionEnabled = NO;
             button.alpha = 0.25;
@@ -145,9 +146,9 @@
         CGPoint location = [recognizer locationInView:self];
         UIView *tappedView = [self hitTest:location withEvent:nil];
         
-        if ([self.labels containsObject:tappedView]) {
+        if ([self.buttons containsObject:tappedView]) {
             if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
-                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UILabel *)tappedView).text];
+                [self.delegate floatingToolbar:self didSelectButtonWithTitle:((UIButton *)tappedView).titleLabel.text];
             }
         }
     }
@@ -178,12 +179,12 @@
     }
 }
 
-- (void)setColorsForLabels {
-    for (UILabel *label in self.labels) {
-        NSUInteger currentLabelIndex = [self.labels indexOfObject:label];
-        UIColor *colorForThisLabel = [self.colors objectAtIndex:currentLabelIndex];
+- (void)setColorsForButtons {
+    for (UIButton *button in self.buttons) {
+        NSUInteger currentButtonIndex = [self.buttons indexOfObject:button];
+        UIColor *colorForThisButton = [self.colors objectAtIndex:currentButtonIndex];
         
-        label.backgroundColor = colorForThisLabel;
+        button.backgroundColor = colorForThisButton;
         
     }
 }
@@ -212,7 +213,7 @@
             //set new colors
             //self.currentTitles = titles;
             self.colors = mutableColorArray;
-        [self setColorsForLabels];
+        [self setColorsForButtons];
     
         
 
@@ -290,13 +291,13 @@
 
 #pragma mark - Touch Handling
 
-- (UILabel *) labelFromTouches:(NSSet *)touches withEvent:(UIEvent *)event {
+- (UIButton *) labelFromTouches:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self];
     UIView *subview = [self hitTest:location withEvent:event];
     
-    if ([subview isKindOfClass:[UILabel class]]) {
-        return (UILabel *)subview;
+    if ([subview isKindOfClass:[UIButton class]]) {
+        return (UIButton *)subview;
     } else {
         return nil;
     }
@@ -311,9 +312,9 @@
     NSUInteger index = [self.currentTitles indexOfObject:title];
     
     if (index != NSNotFound) {
-        UILabel *label = [self.labels objectAtIndex:index];
-        label.userInteractionEnabled = enabled;
-        label.alpha = enabled ? 1.0 : 0.25;
+        UIButton *button = [self.buttons objectAtIndex:index];
+        button.userInteractionEnabled = enabled;
+        button.alpha = enabled ? 1.0 : 0.25;
     }
 }
 
