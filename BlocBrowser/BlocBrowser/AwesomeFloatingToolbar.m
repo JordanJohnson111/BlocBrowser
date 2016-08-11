@@ -100,10 +100,10 @@
         for (NSString *currentTitle in self.currentTitles) {
             
             //create button
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; //fix this not the way to initialize
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom]; //fix this not the way to initialize
             //UILabel *label = [[UILabel alloc] init];
             button.userInteractionEnabled = NO;
-            button.alpha = 0.25;
+            button.alpha = 1;
             
             NSUInteger currentTitleIndex = [self.currentTitles indexOfObject:currentTitle]; // 0 through 3
             NSString *titleForThisButton = [self.currentTitles objectAtIndex:currentTitleIndex];
@@ -125,7 +125,7 @@
             [buttonsArray addObject:button];
         }
         
-        //self.buttons = buttonsArray;
+        self.buttons = buttonsArray;
         
         //display buttons
         for (UIButton *thisButton in buttonsArray) {
