@@ -98,6 +98,8 @@
         
         // Make the 4 buttons
         for (NSString *currentTitle in self.currentTitles) {
+            
+            //create button
             UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem]; //fix this not the way to initialize
             //UILabel *label = [[UILabel alloc] init];
             button.userInteractionEnabled = NO;
@@ -107,18 +109,25 @@
             NSString *titleForThisButton = [self.currentTitles objectAtIndex:currentTitleIndex];
             UIColor *colorForThisButton = [self.colors objectAtIndex:currentTitleIndex];
             
+            //define attributes of button
             
             button.titleLabel.font = [UIFont systemFontOfSize:10];
-            button.titleLabel.text = titleForThisButton;
+            //[button setFont:[UIFont systemFontofSize:10]];
+            //button.titleLabel.text = titleForThisButton;
+            [button setTitle:titleForThisButton forState:UIControlStateNormal];
             //work here for setting text
-            button.backgroundColor = colorForThisButton;
-            button.tintColor = [UIColor whiteColor];
+            [button setBackgroundColor:colorForThisButton];
+            //button.backgroundColor = colorForThisButton;
+            //button.tintColor = [UIColor whiteColor];
+            [button setTintColor:[UIColor whiteColor]];
             
+            //add each button to the button array
             [buttonsArray addObject:button];
         }
         
         //self.buttons = buttonsArray;
         
+        //display buttons
         for (UIButton *thisButton in buttonsArray) {
             [self addSubview:thisButton];
         }
