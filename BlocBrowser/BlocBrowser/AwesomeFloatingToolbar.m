@@ -7,13 +7,6 @@
 //
 
 #import "AwesomeFloatingToolbar.h"
-#import <WebKit/Webkit.h>
-
-#define kWebBrowserBackString NSLocalizedString(@"Back", @"Back command")
-#define kWebBrowserForwardString NSLocalizedString(@"Forward", @"Forward command")
-#define kWebBrowserStopString NSLocalizedString(@"Stop", @"Stop command")
-#define kWebBrowserRefreshString NSLocalizedString(@"Refresh", @"Reload command")
-
 
 @interface AwesomeFloatingToolbar ()
 
@@ -27,7 +20,6 @@
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
 @property (nonatomic, strong) NSArray *buttons;
 @property (nonatomic, strong) UIButton *button;
-@property (nonatomic, strong) WKWebView *webView;
 
 @end
 
@@ -62,36 +54,13 @@
             UIColor *colorForThisButton = [self.colors objectAtIndex:currentTitleIndex];
             
             //define attributes of button
-            
             button.titleLabel.font = [UIFont systemFontOfSize:10];
-            //[button setFont:[UIFont systemFontofSize:10]];
-            //button.titleLabel.text = titleForThisButton;
             [button setTitle:titleForThisButton forState:UIControlStateNormal];
-            //work here for setting text
             [button setBackgroundColor:colorForThisButton];
-            //button.backgroundColor = colorForThisButton;
-            //button.tintColor = [UIColor whiteColor];
             [button setTintColor:[UIColor whiteColor]];
             
-            //define button actions
-//            NSString *actionForThisButton = [[NSString alloc] init];
-//            if ([button.titleLabel isEqual:kWebBrowserBackString]) {
-//                actionForThisButton = [self.webView goBack];
-//            } else if ([button.titleLabel isEqual:kWebBrowserForwardString]) {
-//                actionForThisButton = [self.webView goForward];
-//            } else if ([button.titleLabel isEqual:kWebBrowserStopString]) {
-//                actionForThisButton = [self.webView stopLoading];
-//            } else if ([button.titleLabel isEqual:kWebBrowserRefreshString]) {
-//                actionForThisButton = [self.webView reload];
-//            }
-            
             //set button action
-            [button addTarget:self action:@selector(awesomeFloatingToolbar:didSelectButtonWithTitle:) forControlEvents:UIControlEventTouchUpInside];
-            //[button addTarget:self action:@selector(setEnabled:) forControlEvents:UIControlEventTouchUpInside];
- 
-            //[button addTarget:self action:@selector([self.webView reload]:) forControlEvents:UIControlEventTouchUpInside];
-            //[button addTarget:self action:@selector(actionForThisButton:) forControlEvents:UIControlEventTouchUpInside];
-            
+            [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
             
             //add each button to the button array
             [buttonsArray addObject:button];
@@ -119,6 +88,13 @@
 }
 
 #pragma mark -  Gesture Handling
+
+
+- (void)buttonPressed:(UIButton *)button {
+    if ([self.delegate respondsToSelector:@selector(floatingToolbar:didSelectButtonWithTitle:)]) {
+        [self.delegate floatingToolbar:self didSelectButtonWithTitle:button.titleLabel.text];
+    }
+}
 
 - (void) tapFired:(UITapGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateRecognized) {
@@ -248,21 +224,6 @@
         button.alpha = enabled ? 1.0 : 0.25;
     }
 }
-
-
-//Button Actions???
-- (void) awesomeFloatingToolbar:(AwesomeFloatingToolbar *)toolbar didSelectButtonWithTitle:(NSString *)button {
-    if ([button.titleLabel isEqual:kWebBrowserBackString]) {
-        [self.webView goBack];
-    } else if ([button.titleLabel isEqual:kWebBrowserForwardString]) {
-        [self.webView goForward];
-    } else if ([button.titleLabel isEqual:kWebBrowserStopString]) {
-        [self.webView stopLoading];
-    } else if ([button.titleLabel isEqual:kWebBrowserRefreshString]) {
-        [self.webView reload];
-    }
-}
-
 
 /*
 // Only override drawRect: if you perform custom drawing.
